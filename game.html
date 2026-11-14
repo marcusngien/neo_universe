@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <script>
+      try {
+        if (!localStorage.getItem("ghostEntered"))
+          location.replace("login.html");
+      } catch (e) {}
+    </script>
+    <title>Mini Games · Neo Universe</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Source+Serif+4:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/games.css" />
+  </head>
+  <body>
+    <canvas id="sky"></canvas>
+
+    <header class="top">
+      <b>NEO UNIVERSE</b>
+      <a href="index.html">HOME</a>
+      <a href="story.html">STORY</a>
+      <a href="quiz.html">QUIZ</a>
+      <a href="games.html">GAMES</a>
+      <a href="login.html?logout=1">LOG OUT</a>
+    </header>
+
+    <section id="gamesec">
+      <h2 class="sec">Mini Games</h2>
+      <p class="sub">
+        Three games for three kinds of explorers. Play, laugh, and meet the
+        machines we left behind in space.
+      </p>
+
+      <div class="gtools">
+        <button class="btn alt" id="gVoice" aria-pressed="false">
+          🔊 READ ALOUD: OFF
+        </button>
+      </div>
+
+      <div class="tabs" role="tablist" id="gtabs">
+        <button role="tab" data-p="g1" aria-selected="true">
+          🧩 MEMORY MATCH
+        </button>
+        <button role="tab" data-p="g2" aria-selected="false">
+          🚀 PLACE SORTER
+        </button>
+        <button role="tab" data-p="g3" aria-selected="false">
+          🕵️ WHO AM I?
+        </button>
+      </div>
+
+      <!-- Game 1 -->
+      <div class="pane on" id="g1">
+        <p class="gage">★ LITTLE EXPLORERS · KINDERGARTEN &amp; EARLY PRIMARY</p>
+        <div class="gbox" id="mm"></div>
+      </div>
+
+      <!-- Game 2 -->
+      <div class="pane" id="g2">
+        <p class="gage">★★ JUNIOR EXPLORERS · PRIMARY SCHOOL</p>
+        <div class="gbox" id="ps"></div>
+      </div>
+
+      <!-- Game 3 -->
+      <div class="pane" id="g3">
+        <p class="gage">★★★ SENIOR EXPLORERS · SECONDARY SCHOOL</p>
+        <div class="gbox" id="wa"></div>
+      </div>
+
+      <div class="game-nav-links">
+        <a href="index.html" class="nav-btn"><span>🏠</span> Back to home</a>
+        <a href="quiz.html" class="nav-btn"><span>❓</span> Take the quiz ▸</a>
+      </div>
+    </section>
+
+    <div id="toast"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/utlis.js"></script>
+    <script src="js/sky.js"></script>
+    <script src="js/progress.js"></script>
+    <script src="js/games.js"></script>
+  </body>
+</html>
