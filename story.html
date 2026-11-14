@@ -24,20 +24,17 @@
         scroll-behavior: smooth;
       }
 
-      
       body > section#story {
         padding: 0 !important;
         max-width: 100% !important;
         margin: 0 !important;
       }
 
-      
       #story > .sec,
       #story > .sub {
         display: none;
       }
 
-      
       #stg.stg {
         display: flex !important;
         flex-direction: column !important;
@@ -48,7 +45,6 @@
         box-shadow: none !important;
       }
 
-      
       #stpic.stpic {
         position: relative;
         width: 100%;
@@ -64,11 +60,10 @@
       #stpic img {
         width: 100% !important;
         height: 100% !important;
-        object-fit: contain; 
+        object-fit: contain;
         border-radius: 0 !important;
       }
 
-      
       #stpic span {
         pointer-events: none;
         top: 84px !important;
@@ -78,24 +73,32 @@
         z-index: 5;
       }
 
-      
       .scroll-cue {
         position: absolute;
         bottom: 64px;
         left: 50%;
         transform: translateX(-50%);
         z-index: 6;
-        padding: 8px 18px;
+        padding: 10px 20px;
         border-radius: 999px;
-        background: rgba(5, 8, 24, 0.72);
+        background: rgba(5, 8, 24, 0.78);
         border: 1px solid rgba(61, 224, 255, 0.45);
         color: var(--cyan, #3de0ff);
         font-family: "Orbitron", sans-serif;
         font-size: 12px;
-        letter-spacing: 2px;
+        letter-spacing: 1.5px;
         text-decoration: none;
+        white-space: nowrap;
         backdrop-filter: blur(6px);
         animation: bounceCue 2s infinite;
+        transition: opacity 0.35s ease, visibility 0.35s ease;
+        cursor: pointer;
+      }
+
+      .scroll-cue.is-hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
       }
 
       @keyframes bounceCue {
@@ -103,7 +106,6 @@
         50% { transform: translate(-50%, 6px); }
       }
 
-      
       #stx.stx {
         width: min(920px, calc(100% - 32px));
         margin: 56px auto 24px;
@@ -114,7 +116,6 @@
         box-shadow: 0 0 36px rgba(0, 0, 0, 0.55);
       }
 
-     
       #story > .tlnav {
         width: min(920px, calc(100% - 32px));
         margin: 0 auto 72px;
@@ -136,13 +137,13 @@
       <p class="sub">Seven chapters, seven generations, one mission.</p>
 
       <div class="stg" id="stg">
-   
         <div style="position: relative; width: 100%;">
           <div class="stpic" id="stpic"></div>
-          <a href="#stx" class="scroll-cue">SCROLL DOWN FOR STORY ▾</a>
+          <a href="#stx" class="scroll-cue" id="scrollCue">
+            SCROLL DOWN FOR MORE INFORMATION ▾
+          </a>
         </div>
 
-       
         <div class="stx" id="stx">
           <div class="stgen" id="stgen"></div>
           <h3 id="sttitle"></h3>
@@ -164,7 +165,6 @@
 
     <div id="toast"></div>
 
-   
     <div id="modal" aria-modal="true" role="dialog">
       <div class="mbox" id="mbox">
         <div class="mhead">
@@ -203,15 +203,46 @@
     <script src="js/model3d.js"></script>
     <script src="js/story.js"></script>
     <script>
-  
-      ["stPrev", "stNext"].forEach(function (id) {
-        var btn = document.getElementById(id);
-        if (btn) {
-          btn.addEventListener("click", function () {
-            window.scrollTo({ top: 0, behavior: "smooth" });
+      (function () {
+        var cue = document.getElementById("scrollCue");
+        var dismissed = false;
+
+        if (cue) {
+          cue.addEventListener("click", function (e) {
+            e.preventDefault();
+            dismissed = true;
+            cue.classList.add("is-hidden");
+            var target = document.getElementById("stx");
+            if (target) {
+              target.scrollIntoView({ behavior: "smooth" });
+            }
           });
         }
-      });
+
+        window.addEventListener(
+          "scroll",
+          function () {
+            if (!cue) return;
+            if (window.scrollY > 120) {
+              cue.classList.add("is-hidden");
+            } else if (!dismissed) {
+              cue.classList.remove("is-hidden");
+            }
+          },
+          { passive: true }
+        );
+
+        ["stPrev", "stNext"].forEach(function (id) {
+          var btn = document.getElementById(id);
+          if (btn) {
+            btn.addEventListener("click", function () {
+              dismissed = false;
+              if (cue) cue.classList.remove("is-hidden");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+          }
+        });
+      })();
     </script>
   </body>
 </html>
