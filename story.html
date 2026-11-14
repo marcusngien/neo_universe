@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <script>
+      try {
+        if (!localStorage.getItem("ghostEntered"))
+          location.replace("login.html");
+      } catch (e) {}
+    </script>
+    <title>Story · Neo Universe</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Source+Serif+4:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      body > section {
+        padding-top: 90px;
+      }
+      /* 防止年份角标遮挡组员视频底部的播放进度条 */
+      #stpic span {
+        pointer-events: none;
+        top: 14px;
+        bottom: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="sky"></canvas>
+
+    <header class="top">
+      <b>NEO UNIVERSE</b>
+      <a href="index.html">HOME</a>
+      <a href="story.html">STORY</a>
+      <a href="login.html?logout=1">LOG OUT</a>
+    </header>
+
+    <section id="story">
+      <h2 class="sec">Story Mode</h2>
+      <p class="sub">Seven chapters, seven generations, one mission.</p>
+      <div class="stg" id="stg">
+        <div class="stpic" id="stpic"></div>
+        <div class="stx">
+          <div class="stgen" id="stgen"></div>
+          <h3 id="sttitle"></h3>
+          <p id="sttext"></p>
+          <div class="chips" id="stlinks"></div>
+          <div class="row">
+            <button class="btn pk" id="stsay">🔊 READ ALOUD</button>
+          </div>
+          <div class="stmis" id="stmis"></div>
+        </div>
+      </div>
+      <div class="tlnav">
+        <button class="btn alt" id="stPrev">◂ PREV</button>
+        <div class="prog"><i id="stprog"></i></div>
+        <button class="btn alt" id="stNext">NEXT ▸</button>
+      </div>
+    </section>
+
+    <div id="toast"></div>
+
+    <!-- 保留 3D 模型弹窗，确保点击故事内的探测器按钮可正常查看 3D 模型 -->
+    <div id="modal" aria-modal="true" role="dialog">
+      <div class="mbox" id="mbox">
+        <div class="mhead">
+          <h3 id="mtitle"></h3>
+          <button class="btn alt" id="mclose">CLOSE ✕</button>
+        </div>
+        <div class="mgrid">
+          <div id="cv">
+            <div class="cvh">Drag to rotate · click a part</div>
+          </div>
+          <div class="mside">
+            <div class="row">
+              <button class="btn pk" id="speak">
+                🔊 LET THE ROBOT EXPLAIN
+              </button>
+              <button class="btn alt" id="stop">STOP</button>
+              <button class="btn alt" id="vtog">PART VOICE: ON</button>
+            </div>
+            <div class="partbox" id="partbox">
+              <b>Click a part</b>
+              <div>
+                Tap any piece of the model to see its name and what it does.
+              </div>
+            </div>
+            <div class="chips" id="chips"></div>
+            <div class="story" id="mstory"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/utlis.js"></script>
+    <script src="js/sky.js"></script>
+    <script src="js/progress.js"></script>
+    <script src="js/model3d.js"></script>
+    <script src="js/story.js"></script>
+  </body>
+</html>
