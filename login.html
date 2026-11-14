@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Log in · Neo Universe</title>
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://identitytoolkit.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Source+Serif+4:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #050818;
+        --panel: #0b1030;
+        --ink: #eaf0ff;
+        --mute: #9aa6cf;
+        --cyan: #3de0ff;
+        --violet: #8c64ff;
+        --pink: #ff5fb0;
+        --ok: #4ade80;
+        --off: #ff6b6b;
+        --line: rgba(255, 255, 255, 0.18);
+      }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; margin: 0; }
+      body {
+        background: radial-gradient(ellipse at 50% 120%, #1a1450 0%, var(--bg) 60%);
+        color: var(--ink);
+        font-family: "Source Serif 4", Georgia, serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        padding-top: max(16px, env(safe-area-inset-top, 0px));
+        padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
+        overflow-x: hidden;
+      }
+
+      /* stars */
+      #stars { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; }
+
+      /* signal */
+      .signal {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        width: 0;
+        height: 0;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .signal i {
+        position: absolute;
+        left: -300px;
+        top: -300px;
+        width: 600px;
+        height: 600px;
+        border: 1px solid var(--cyan);
+        border-radius: 50%;
+        opacity: 0;
+        animation: ping 7s ease-out infinite;
+      }
+      .signal i:nth-child(2) { animation-delay: 2.3s; }
+      .signal i:nth-child(3) { animation-delay: 4.6s; }
+      @keyframes ping {
+        0% { transform: scale(0.2); opacity: 0.45; }
+        100% { transform: scale(1.8); opacity: 0; }
+      }
+
+      /* compact main container */
+      main {
+        position: relative;
+        z-index: 1;
+        width: min(390px, 100%);
+        padding: 20px 20px 16px;
+        background: rgba(11, 16, 48, 0.86);
+        border: 1px solid var(--violet);
+        border-radius: 16px;
+        box-shadow: 0 0 48px rgba(140, 100, 255, 0.3);
+        backdrop-filter: blur(6px);
+      }
+      .back {
+        display: inline-block;
+        margin-bottom: 12px;
+        color: var(--mute);
+        font-size: 13px;
+        text-decoration: none;
+      }
+      .back:hover { color: var(--cyan); }
+
+      h1 {
+        margin: 0 0 4px;
+        font-family: "Orbitron", sans-serif;
+        font-weight: 900;
+        font-size: 22px;
+        line-height: 1.1;
+      }
+      .lead { margin: 0 0 14px; color: var(--mute); font-size: 14px; line-height: 1.4; }
+
+      .tabs { display: flex; gap: 6px; margin-bottom: 12px; }
+      .tabs button {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: transparent;
+        color: var(--ink);
+        font-family: "Orbitron", sans-serif;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .tabs button[aria-selected="true"] { background: var(--violet); border-color: var(--violet); }
+
+      form { display: flex; flex-direction: column; gap: 8px; }
+      label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+      input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--ink);
+        font: 14px "Source Serif 4", Georgia, serif;
+      }
+      input::placeholder { color: var(--mute); }
+      input:focus-visible,
+      button:focus-visible,
+      a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+      .btn {
+        width: 100%;
+        padding: 10px;
+        border: 0;
+        border-radius: 8px;
+        background: linear-gradient(90deg, var(--cyan), var(--violet));
+        color: #050818;
+        font-family: "Orbitron", sans-serif;
+        font-weight: 700;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      .btn:disabled { opacity: 0.6; cursor: wait; }
+      .btn.alt {
+        background: transparent;
+        color: var(--ink);
+        border: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .btn.alt:hover { border-color: var(--cyan); }
+
+      .or { display: flex; align-items: center; gap: 10px; margin: 10px 0; color: var(--mute); font-size: 13px; }
+      .or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+      .link {
+        display: block;
+        margin: 10px auto 0;
+        padding: 2px;
+        border: 0;
+        background: none;
+        color: var(--cyan);
+        font: 13px "Source Serif 4", Georgia, serif;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      #msg { min-height: 18px; margin-top: 8px; font-size: 13px; line-height: 1.3; }
+      #msg.ok { color: var(--ok); }
+      #msg.err { color: var(--off); }
+
+      #ain { display: none; }
+      #ain p { margin: 0 0 14px; color: var(--mute); line-height: 1.4; }
+      #ain .btn + .btn { margin-top: 8px; }
+
+      [hidden] { display: none !important; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .signal i { animation: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="stars" aria-hidden="true"></canvas>
+    <div class="signal" aria-hidden="true"><i></i><i></i><i></i></div>
+
+    <main>
+      <h1 id="title">Log in</h1>
+      <p class="lead" id="lead">Save your badges and quiz progress, and pick up where you left off on any device.</p>
+
+      <!-- logged out -->
+      <div id="aout">
+        <div class="tabs" role="tablist">
+          <button type="button" role="tab" id="tabLogin" aria-selected="true">Log in</button>
+          <button type="button" role="tab" id="tabSignup" aria-selected="false">Sign up</button>
+        </div>
+
+        <form id="aform">
+          <label for="aname">Explorer name</label>
+          <input id="aname" type="text" placeholder="Explorer name" autocomplete="nickname" hidden />
+          <label for="aemail">Email</label>
+          <input id="aemail" type="email" placeholder="Email" autocomplete="email" required />
+          <label for="apass">Password</label>
+          <input id="apass" type="password" placeholder="Password (at least 6 characters)" autocomplete="current-password" minlength="6" required />
+          <button class="btn" id="asubmit" type="submit">Log in</button>
+        </form>
+
+        <div class="or">or</div>
+        <button class="btn alt" id="agoogle" type="button">
+          <svg width="16" height="16" viewBox="0 0 48 48" aria-hidden="true">
+            <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.5 17.7 9.5 24 9.5z" />
+            <path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.1 5.5c4.2-3.9 6.8-9.6 6.8-16.9z" />
+            <path fill="#FBBC05" d="M10.5 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7l-7.9-6.1A24 24 0 0 0 0 24c0 3.9.9 7.5 2.6 10.8l7.9-6.1z" />
+            <path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.1-5.5c-2 1.3-4.5 2.1-8.8 2.1-6.3 0-11.6-4-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z" />
+          </svg>
+          Continue with Google
+        </button>
+        
+        <button class="link" id="areset" type="button">Forgot your password?</button>
+      </div>
+
+      <!-- already logged in -->
+      <div id="ain">
+        <p id="ahello"></p>
+        <button class="btn" id="agoto" type="button">Continue to the site</button>
+        <button class="btn alt" id="alogout" type="button">Log out</button>
+      </div>
+
+      <div id="msg" role="status" aria-live="polite"></div>
+    </main>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        signOut,
+        GoogleAuthProvider,
+        signInWithPopup,
+        sendPasswordResetEmail,
+        updateProfile,
+      } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
+      import {
+        getFirestore,
+        doc,
+        getDoc,
+        setDoc,
+        serverTimestamp,
+      } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyAiHAHmzCDvLDJXO2yxwKL15erbAnQNQsw",
+        authDomain: "neo-universe-29373.firebaseapp.com",
+        projectId: "neo-universe-29373",
+        storageBucket: "neo-universe-29373.firebasestorage.app",
+        messagingSenderId: "121577208500",
+        appId: "1:121577208500:web:a917a3ae01c9dea5a935e1",
+        measurementId: "G-Y73R83211K",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      const $ = (id) => document.getElementById(id);
+      const HOME = "index.html";
+      const SYNC_TIMEOUT_MS = 2000;
+      let mode = "login";
+      let redirecting = false;
+      let syncErr = "";
+      let justLoggedIn = false;
+
+      const wantsLogout = new URLSearchParams(location.search).has("logout");
+      if (wantsLogout) {
+        try {
+          localStorage.removeItem("ghostP");
+          localStorage.removeItem("ghostEntered");
+        } catch (e) {}
+        history.replaceState(null, "", "login.html");
+        signOut(auth).catch((e) => console.error("Sign out failed", e));
+      }
+
+      const ERR = {
+        "auth/invalid-credential": "Wrong email or password.",
+        "auth/invalid-email": "That email address doesn't look right.",
+        "auth/email-already-in-use": "That email already has an account. Try logging in.",
+        "auth/weak-password": "Password must be at least 6 characters.",
+        "auth/too-many-requests": "Too many tries. Wait a moment and try again.",
+        "auth/popup-closed-by-user": "The Google window was closed before you finished.",
+        "auth/network-request-failed": "Network problem. Check your connection.",
+        "auth/operation-not-allowed": "This sign-in method isn't enabled in the Firebase console.",
+        "auth/configuration-not-found": "Authentication isn't set up yet. In the Firebase console, open Authentication, press Get started, and enable Email/Password.",
+        "auth/unauthorized-domain": "This domain isn't listed in Firebase → Authentication → Settings → Authorized domains.",
+      };
+      function say(text, ok) {
+        const m = $("msg");
+        m.textContent = text || "";
+        m.className = text ? (ok ? "ok" : "err") : "";
+      }
+      function fail(e) {
+        console.error(e);
+        say(ERR[e.code] || "Something went wrong: " + (e.code || e.message));
+      }
+
+      function mergeProgress(a, b) {
+        const out = { seen: {}, quiz: 0, quizDone: false, badges: {} };
+        [a, b].forEach((p) => {
+          if (!p) return;
+          Object.keys(p.seen || {}).forEach((k) => (out.seen[k] = 1));
+          Object.keys(p.badges || {}).forEach((k) => (out.badges[k] = 1));
+          out.quiz = Math.max(out.quiz, p.quiz || 0);
+          out.quizDone = out.quizDone || !!p.quizDone;
+        });
+        return out;
+      }
+      function sameProgress(a, b) {
+        if (!a || !b) return false;
+        const keys = (o) => Object.keys(o || {}).sort().join(",");
+        return (
+          keys(a.seen) === keys(b.seen) &&
+          keys(a.badges) === keys(b.badges) &&
+          (a.quiz || 0) === (b.quiz || 0) &&
+          !!a.quizDone === !!b.quizDone
+        );
+      }
+      function readLocal() {
+        try { return JSON.parse(localStorage.getItem("ghostP")); } catch (e) { return null; }
+      }
+
+      async function syncProgress(user) {
+        try {
+          const ref = doc(db, "users", user.uid);
+          const snap = await getDoc(ref);
+          const cloud = snap.exists() ? snap.data().progress : null;
+          const merged = mergeProgress(readLocal(), cloud);
+          try { localStorage.setItem("ghostP", JSON.stringify(merged)); } catch (e) {}
+          if (!snap.exists() || !sameProgress(merged, cloud)) {
+            await setDoc(
+              ref,
+              { name: user.displayName || "", progress: merged, updatedAt: serverTimestamp() },
+              { merge: true }
+            );
+          }
+          return true;
+        } catch (e) {
+          console.error("Progress sync failed", e);
+          syncErr = e.code || e.message || "unknown";
+          return false;
+        }
+      }
+
+      function setMode(m) {
+        mode = m;
+        $("tabLogin").setAttribute("aria-selected", m === "login");
+        $("tabSignup").setAttribute("aria-selected", m === "signup");
+        $("aname").hidden = m !== "signup";
+        $("asubmit").textContent = m === "signup" ? "Create account" : "Log in";
+        $("apass").autocomplete = m === "signup" ? "new-password" : "current-password";
+        $("title").textContent = m === "signup" ? "Create your account" : "Log in";
+        say("");
+      }
+      $("tabLogin").onclick = () => setMode("login");
+      $("tabSignup").onclick = () => setMode("signup");
+
+      $("aform").onsubmit = async (e) => {
+        e.preventDefault();
+        const email = $("aemail").value.trim();
+        const pass = $("apass").value;
+        $("asubmit").disabled = true;
+        say("");
+        justLoggedIn = true;
+        try {
+          if (mode === "signup") {
+            const cred = await createUserWithEmailAndPassword(auth, email, pass);
+            const name = $("aname").value.trim();
+            if (name) await updateProfile(cred.user, { displayName: name });
+          } else {
+            await signInWithEmailAndPassword(auth, email, pass);
+          }
+          $("apass").value = "";
+        } catch (err) {
+          justLoggedIn = false;
+          fail(err);
+        } finally {
+          $("asubmit").disabled = false;
+        }
+      };
+
+      $("agoogle").onclick = async () => {
+        say("");
+        justLoggedIn = true;
+        try {
+          await signInWithPopup(auth, new GoogleAuthProvider());
+        } catch (err) {
+          justLoggedIn = false;
+          fail(err);
+        }
+      };
+
+      $("areset").onclick = async () => {
+        const email = $("aemail").value.trim();
+        if (!email) return say("Type your email above, then press this again.");
+        try {
+          await sendPasswordResetEmail(auth, email);
+          say("Password reset email sent. Check your inbox and spam folder.", true);
+        } catch (err) {
+          fail(err);
+        }
+      };
+
+      function markEntered() {
+        try { localStorage.setItem("ghostEntered", "1"); } catch (e) {}
+      }
+      $("agoto").onclick = () => (location.href = HOME);
+      $("alogout").onclick = async () => {
+        try {
+          await signOut(auth);
+          try {
+            localStorage.removeItem("ghostP");
+            localStorage.removeItem("ghostEntered");
+          } catch (e) {}
+        } catch (err) {
+          fail(err);
+        }
+      };
+
+      onAuthStateChanged(auth, async (user) => {
+        if (user && wantsLogout) return;
+        if (user) {
+          $("aout").style.display = "none";
+          $("ain").style.display = "block";
+          $("title").textContent = "You're logged in";
+          $("lead").textContent = "";
+          $("ahello").textContent = "Signed in as " + (user.displayName || user.email || "Explorer") + ".";
+          markEntered();
+          if (!justLoggedIn || redirecting) return;
+          redirecting = true;
+          say("Syncing your progress…", true);
+          const ok = await Promise.race([
+            syncProgress(user),
+            new Promise((r) => setTimeout(() => r("slow"), SYNC_TIMEOUT_MS)),
+          ]);
+          if (ok === true || ok === "slow") {
+            location.href = HOME;
+          } else {
+            redirecting = false;
+            say("Logged in, but progress couldn't be synced (" + syncErr + "). Check that Firestore is created and your rules allow it.");
+          }
+        } else {
+          redirecting = false;
+          $("aout").style.display = "block";
+          $("ain").style.display = "none";
+          $("lead").textContent = "Save your badges and quiz progress, and pick up where you left off on any device.";
+          setMode(mode);
+        }
+      });
+
+      setMode("login");
+
+      (function () {
+        const c = $("stars");
+        const g = c.getContext("2d");
+        let stars = [];
+        function size() {
+          c.width = innerWidth;
+          c.height = innerHeight;
+          stars = Array.from({ length: Math.round((c.width * c.height) / 7000) }, () => ({
+            x: Math.random() * c.width,
+            y: Math.random() * c.height,
+            r: Math.random() * 1.2 + 0.2,
+            a: Math.random() * 0.6 + 0.3,
+          }));
+          draw();
+        }
+        function draw() {
+          g.clearRect(0, 0, c.width, c.height);
+          stars.forEach((s) => {
+            g.globalAlpha = s.a;
+            g.fillStyle = "#fff";
+            g.beginPath();
+            g.arc(s.x, s.y, s.r, 0, 6.283);
+            g.fill();
+          });
+        }
+        addEventListener("resize", size);
+        size();
+      })();
+    </script>
+  </body>
+</html>

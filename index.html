@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <script>
+      try {
+        if (!localStorage.getItem("ghostEntered"))
+          location.replace("login.html");
+      } catch (e) {}
+    </script>
+    <title>Neo Universe · Space Hardware</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Source+Serif+4:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+
+/* ---------- home hub: wide Story card & Quiz/Badges tiles ---------- */
+      .hub {
+        display: grid;
+        gap: 16px;
+        max-width: 1200px;
+        margin: 28px auto 0;
+      }
+      .hub a {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        text-decoration: none;
+        color: var(--ink, #eaf0ff);
+        border: 1px solid var(--c);
+        border-radius: 16px;
+        background: rgba(11, 16, 48, 0.82);
+        box-shadow: 0 0 28px color-mix(in srgb, var(--c) 35%, transparent);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .hub a:hover,
+      .hub a:focus-visible {
+        transform: translateY(-4px);
+        box-shadow: 0 0 40px color-mix(in srgb, var(--c) 60%, transparent);
+      }
+      .hub a:focus-visible {
+        outline: 2px solid var(--cyan, #3de0ff);
+        outline-offset: 3px;
+      }
+
+      /* wide Story card */
+      .hub .big {
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: clamp(20px, 4vw, 48px);
+        min-height: 340px;
+        padding: clamp(24px, 4vw, 52px);
+        background: linear-gradient(
+          135deg,
+          rgba(140, 100, 255, 0.3),
+          rgba(11, 16, 48, 0.9) 70%
+        );
+      }
+      .hub .big .go {
+        position: absolute;
+        top: 24px;
+        right: 28px;
+        font-family: "Orbitron", sans-serif;
+        font-size: 14px;
+        letter-spacing: 1px;
+        color: var(--c);
+      }
+      .hub .big .ic {
+        flex: none;
+        font-size: clamp(90px, 16vw, 180px);
+        line-height: 1;
+      }
+      .hub .big .kick {
+        margin-bottom: 10px;
+        font-family: "Orbitron", sans-serif;
+        font-size: 14px;
+        letter-spacing: 3px;
+        color: var(--c);
+      }
+      .hub .big h3 {
+        margin: 0 0 10px;
+        font-family: "Orbitron", sans-serif;
+        font-weight: 900;
+        font-size: clamp(34px, 7vw, 72px);
+        line-height: 1.05;
+      }
+      .hub .big p {
+        margin: 0;
+        font-size: clamp(16px, 2.4vw, 22px);
+        color: var(--mute, #9aa6cf);
+      }
+
+      /* ---------- 底部 Quiz + Badges 各占一半大卡片 ---------- */
+      .hub .sqs {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+        width: 100%;
+      }
+      .hub .sq {
+        aspect-ratio: auto;
+        min-height: 140px;
+        padding: 24px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .hub .sq .ic {
+        font-size: 52px;
+        line-height: 1;
+        margin-bottom: 8px;
+      }
+      .hub .sq h3 {
+        margin: 6px 0 4px;
+        font-family: "Orbitron", sans-serif;
+        font-size: 20px;
+        letter-spacing: 1px;
+      }
+      .hub .sq p {
+        margin: 0;
+        font-size: 14px;
+        color: var(--mute, #9aa6cf);
+      }
+
+      /* ---------- hero: text on the left, mini solar system on the right ---------- */
+      .herogrid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+        gap: clamp(16px, 4vw, 56px);
+        align-items: center;
+      }
+      .herotext {
+        min-width: 0;
+      }
+      .heroart {
+        justify-self: center;
+        width: min(100%, 460px);
+        aspect-ratio: 1 / 1;
+      }
+      .heroart svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      .hring {
+        fill: none;
+        stroke: rgba(154, 166, 207, 0.35);
+        stroke-width: 1;
+        stroke-dasharray: 3 7;
+      }
+      .hping {
+        fill: none;
+        stroke: #3de0ff;
+        stroke-width: 1.2;
+        opacity: 0;
+        transform-box: view-box;
+        transform-origin: 200px 200px;
+        animation: hping 6s ease-out infinite;
+      }
+      .hping.p2 {
+        animation-delay: 2s;
+      }
+      .hping.p3 {
+        animation-delay: 4s;
+      }
+      @keyframes hping {
+        0% {
+          transform: scale(0.8);
+          opacity: 0.5;
+        }
+        100% {
+          transform: scale(3.2);
+          opacity: 0;
+        }
+      }
+      .horb {
+        transform-box: view-box;
+        transform-origin: 200px 200px;
+        animation: horb 20s linear infinite;
+      }
+      .horb.h1 {
+        animation-duration: 9s;
+      }
+      .horb.h2 {
+        animation-duration: 18s;
+        animation-direction: reverse;
+      }
+      .horb.h3 {
+        animation-duration: 32s;
+      }
+      @keyframes horb {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* ---------- 响应式查询（统一放在最下） ---------- */
+      @media (prefers-reduced-motion: reduce) {
+        .hping,
+        .horb {
+          animation: none;
+        }
+      }
+      @media (max-width: 820px) {
+        .herogrid {
+          grid-template-columns: 1fr;
+        }
+        .heroart {
+          width: min(70%, 300px);
+        }
+      }
+      @media (max-width: 560px) {
+        .hub .big {
+          flex-direction: column;
+          align-items: flex-start;
+          min-height: 280px;
+          padding: 24px;
+        }
+        .hub .big .go {
+          top: 16px;
+          right: 18px;
+        }
+        .hub .sqs {
+          grid-template-columns: 1fr; /* 小屏手机自动切为单列 */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="sky"></canvas>
+
+    <header class="top">
+      <b>NEO UNIVERSE</b>
+      <a href="#home">HOME</a><a href="#solar">SOLAR SYSTEM</a
+      ><a href="#content">CONTENT</a>
+      <a href="story.html">STORY</a>
+      <a href="login.html?logout=1">LOG OUT</a>
+    </header>
+
+    <section id="home">
+      <div class="herogrid">
+        <div class="herotext">
+          <div class="tag">HARDWARE LEFT BEHIND</div>
+          <h1>Neo<br />Universe</h1>
+          <p class="hw-intro">
+            Since 1958 we have sent machines where people cannot go yet. Some
+            finished their jobs and went silent. Some are still talking. Meet
+            the twenty robots and instruments we left in space, and hear some of
+            them tell its own story.
+          </p>
+        </div>
+
+        <!-- decorative mini solar system on the right -->
+        <div class="heroart" aria-hidden="true">
+          <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="hpl" cx="35%" cy="30%" r="75%">
+                <stop offset="0%" stop-color="#8af0ff" />
+                <stop offset="45%" stop-color="#8c64ff" />
+                <stop offset="100%" stop-color="#ff5fb0" />
+              </radialGradient>
+              <radialGradient id="hgl" cx="50%" cy="50%" r="50%">
+                <stop offset="55%" stop-color="#8c64ff" stop-opacity="0.45" />
+                <stop offset="100%" stop-color="#8c64ff" stop-opacity="0" />
+              </radialGradient>
+            </defs>
+
+            <!-- signal pings: "still talking" -->
+            <circle class="hping" cx="200" cy="200" r="60" />
+            <circle class="hping p2" cx="200" cy="200" r="60" />
+            <circle class="hping p3" cx="200" cy="200" r="60" />
+
+            <!-- orbit rings -->
+            <circle class="hring" cx="200" cy="200" r="88" />
+            <circle class="hring" cx="200" cy="200" r="138" />
+            <circle class="hring" cx="200" cy="200" r="186" />
+
+            <!-- planet -->
+            <circle cx="200" cy="200" r="78" fill="url(#hgl)" />
+            <circle cx="200" cy="200" r="46" fill="url(#hpl)" />
+
+            <!-- inner orbit: small active probe -->
+            <g class="horb h1">
+              <circle cx="288" cy="200" r="6" fill="#3de0ff" />
+            </g>
+
+            <!-- middle orbit: probe with solar panels -->
+            <g class="horb h2">
+              <g transform="translate(338 200)">
+                <rect x="-5" y="-5" width="10" height="10" rx="2" fill="#eaf0ff" />
+                <rect x="-17" y="-3" width="10" height="6" fill="#3de0ff" />
+                <rect x="7" y="-3" width="10" height="6" fill="#3de0ff" />
+              </g>
+            </g>
+
+            <!-- outer orbit: the ghost probe, faded out -->
+            <g class="horb h3">
+              <g transform="translate(386 200)" opacity="0.45">
+                <rect x="-4" y="-4" width="8" height="8" rx="2" fill="#9aa6cf" />
+                <rect x="-14" y="-2.5" width="9" height="5" fill="#9aa6cf" />
+                <rect x="5" y="-2.5" width="9" height="5" fill="#9aa6cf" />
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="hub">
+        <a href="story.html" class="big" style="--c: var(--violet, #8c64ff)">
+          <span class="go">CLICK ▸</span>
+          <div class="ic" aria-hidden="true">📖</div>
+          <div class="txt">
+            <div class="kick">STORY</div>
+            <h3>Ghost Explorers</h3>
+            <p>Seven chapters, seven generations, one mission.</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section id="solar">
+      <h2 class="sec">The Solar System Map</h2>
+      <p class="sub">
+        Bright planets have hardware pinned to them. Click Earth, the Moon or
+        Mars. For deep-space explorers, click the glowing outer ring or the
+empty space beyond it.
+      </p>
+      <div class="solar">
+        <div class="solarbox">
+          <button class="pausebtn" id="pauseBtn">PAUSE ORBITS</button>
+          <svg
+            id="sys"
+            viewBox="0 0 1000 680"
+            aria-label="Solar system map"
+          ></svg>
+          <div class="hint">
+            Moving planets are hard to click? They pause when you hover.
+          </div>
+        </div>
+        <div class="sp" id="sp">
+          <h3>Pick a place</h3>
+          <p class="note">
+            Click a bright planet, the Moon, or the edge of the system to see
+            which explorers are there.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="content">
+      <h2 class="sec">Content</h2>
+      <p class="sub">Four ways to learn about the explorers.</p>
+      <div class="tabs" role="tablist" id="tabs">
+        <button role="tab" data-p="p1" aria-selected="true">TIMELINE</button>
+        <button role="tab" data-p="p2" aria-selected="false">
+          HARDWARE COMPARISON
+        </button>
+        <button role="tab" data-p="p3" aria-selected="false">3D LAB</button>
+        <button role="tab" data-p="p4" aria-selected="false">VIDEOS</button>
+      </div>
+      <div class="pane on" id="p1">
+        <div class="tlwrap">
+          <div class="tl" id="tl"></div>
+          <div class="tlnav">
+            <button class="btn alt" id="tlPrev">◂ PREV</button>
+            <div class="prog"><i id="tlProg"></i></div>
+            <button class="btn alt" id="tlNext">NEXT ▸</button>
+          </div>
+        </div>
+      </div>
+      <div class="pane" id="p2">
+        <div class="cmpsel">
+          <select id="ca" aria-label="First explorer"></select
+          ><select id="cb" aria-label="Second explorer"></select>
+        </div>
+        <div id="cmp"></div>
+      </div>
+      <div class="pane" id="p3">
+        <p class="sub">
+          Open a model, drag to rotate, click any part to learn its name and
+          job, then let the robot explain itself with text to speech.
+        </p>
+        <div class="grid" id="lab"></div>
+      </div>
+      <div class="pane" id="p4">
+        <p class="sub">
+          Click a picture to watch that explorer's video.
+        </p>
+        <div class="grid" id="vids"></div>
+      </div>
+    </section>
+
+    <section id="story" style="display: none">
+      <h2 class="sec">Story Mode</h2>
+      <p class="sub">Seven chapters, seven generations, one mission.</p>
+      <div class="stg" id="stg">
+        <div class="stpic" id="stpic"></div>
+        <div class="stx">
+          <div class="stgen" id="stgen"></div>
+          <h3 id="sttitle"></h3>
+          <p id="sttext"></p>
+          <div class="chips" id="stlinks"></div>
+          <div class="row">
+            <button class="btn pk" id="stsay">🔊 READ ALOUD</button>
+          </div>
+          <div class="stmis" id="stmis"></div>
+        </div>
+      </div>
+      <div class="tlnav">
+        <button class="btn alt" id="stPrev">◂ PREV</button>
+        <div class="prog"><i id="stprog"></i></div>
+        <button class="btn alt" id="stNext">NEXT ▸</button>
+      </div>
+    </section>
+
+    <!-- Quiz and Badges live on quiz.html / badges.html. -->
+    <section id="quizsec" style="display: none">
+      <div class="qz" id="qz"></div>
+    </section>
+
+    <section id="badgesec" style="display: none">
+      <div class="badges" id="badges"></div>
+    </section>
+
+    <!-- Quiz + Badges tiles, at the very bottom -->
+    <section id="more">
+      <h2 class="sec">Test yourself</h2>
+      <div class="hub">
+        <div class="sqs">
+          <a href="quiz.html" class="sq" style="--c: var(--cyan, #3de0ff)">
+            <div class="ic" aria-hidden="true">❓</div>
+            <h3>Quiz</h3>
+            <p>10 questions</p>
+          </a>
+          <a href="badges.html" class="sq" style="--c: var(--pink, #ff5fb0)">
+            <div class="ic" aria-hidden="true">🏅</div>
+            <h3>Badges</h3>
+            <p>Your awards</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div id="toast"></div>
+
+    <div id="modal" aria-modal="true" role="dialog">
+      <div class="mbox" id="mbox">
+        <div class="mhead">
+          <h3 id="mtitle"></h3>
+          <button class="btn alt" id="mclose">CLOSE ✕</button>
+        </div>
+        <div class="mgrid">
+          <div id="cv">
+            <div class="cvh">Drag to rotate · click a part</div>
+          </div>
+          <div class="mside">
+            <div class="row">
+              <button class="btn pk" id="speak">
+                🔊 LET THE ROBOT EXPLAIN
+              </button>
+              <button class="btn alt" id="stop">STOP</button>
+              <button class="btn alt" id="vtog">PART VOICE: ON</button>
+            </div>
+            <div class="partbox" id="partbox">
+              <b>Click a part</b>
+              <div>
+                Tap any piece of the model to see its name and what it does.
+              </div>
+            </div>
+            <div class="chips" id="chips"></div>
+            <div class="story" id="mstory"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order matters: later files use things defined in earlier ones -->
+    <script src="js/data.js"></script>
+    <script src="js/utlis.js"></script>
+    <script src="js/sky.js"></script>
+    <script src="js/progress.js"></script>
+    <script src="js/solar.js"></script>
+    <script src="js/model3d.js"></script>
+    <script src="js/content.js"></script>
+    <script src="js/quiz.js"></script>
+    <script src="js/story.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
