@@ -24,20 +24,20 @@
         scroll-behavior: smooth;
       }
 
-      /* 1. 去掉原有 section 的顶部留白，让全屏视频顶到屏幕最上方 */
+      
       body > section#story {
         padding: 0 !important;
         max-width: 100% !important;
         margin: 0 !important;
       }
 
-      /* 隐藏原有的小标题，保持首屏纯净全屏 */
+      
       #story > .sec,
       #story > .sub {
         display: none;
       }
 
-      /* 2. 改为上下纵向布局，不再左右分栏 */
+      
       #stg.stg {
         display: flex !important;
         flex-direction: column !important;
@@ -48,7 +48,7 @@
         box-shadow: none !important;
       }
 
-      /* 3. 首屏 100vh 全屏视频/图片容器 */
+      
       #stpic.stpic {
         position: relative;
         width: 100%;
@@ -64,11 +64,11 @@
       #stpic img {
         width: 100% !important;
         height: 100% !important;
-        object-fit: contain; /* 完整展示组员视频画面不裁切；如果想铺满不留黑边可改为 cover */
+        object-fit: contain; 
         border-radius: 0 !important;
       }
 
-      /* 年份标签移到左上角导航栏下方，避免遮挡底部进度条 */
+      
       #stpic span {
         pointer-events: none;
         top: 84px !important;
@@ -78,7 +78,7 @@
         z-index: 5;
       }
 
-      /* 底部向下滑动引导提示 */
+      
       .scroll-cue {
         position: absolute;
         bottom: 64px;
@@ -103,7 +103,7 @@
         50% { transform: translate(-50%, 6px); }
       }
 
-      /* 4. 下拉后的文字解释卡片区域 */
+      
       #stx.stx {
         width: min(920px, calc(100% - 32px));
         margin: 56px auto 24px;
@@ -114,7 +114,7 @@
         box-shadow: 0 0 36px rgba(0, 0, 0, 0.55);
       }
 
-      /* 底部章节切换导航栏居中对齐 */
+     
       #story > .tlnav {
         width: min(920px, calc(100% - 32px));
         margin: 0 auto 72px;
@@ -136,13 +136,13 @@
       <p class="sub">Seven chapters, seven generations, one mission.</p>
 
       <div class="stg" id="stg">
-        <!-- 首屏全屏区域 -->
+   
         <div style="position: relative; width: 100%;">
           <div class="stpic" id="stpic"></div>
           <a href="#stx" class="scroll-cue">SCROLL DOWN FOR STORY ▾</a>
         </div>
 
-        <!-- 下拉后才看到的解释区域 -->
+       
         <div class="stx" id="stx">
           <div class="stgen" id="stgen"></div>
           <h3 id="sttitle"></h3>
@@ -164,7 +164,7 @@
 
     <div id="toast"></div>
 
-    <!-- 3D 模型弹窗 -->
+   
     <div id="modal" aria-modal="true" role="dialog">
       <div class="mbox" id="mbox">
         <div class="mhead">
@@ -203,7 +203,7 @@
     <script src="js/model3d.js"></script>
     <script src="js/story.js"></script>
     <script>
-      /* 点击 PREV / NEXT 切换下一章时，自动滚回顶部看新的全屏视频 */
+  
       ["stPrev", "stNext"].forEach(function (id) {
         var btn = document.getElementById(id);
         if (btn) {
