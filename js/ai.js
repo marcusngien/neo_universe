@@ -1,10 +1,9 @@
-/* ============================================================
-   Neo AI  ·  a Puter.js powered chat panel (bottom-left)
-   Needs this line in the page BEFORE ai.js:
-     <script src="https://js.puter.com/v2/"></script>
-   It answers from your own data (the global D array in data.js),
-   so data.js must be loaded before this file.
-============================================================ */
+/**
+ * @file ai.js
+ * @project Neo Universe - NASA Space Apps Challenge
+ * @si-disclosure Portions of this code were generated/assisted using Super Intelligence (SI) / Large Language Model (LLM) tools.
+ * @ai-runtime This script integrates an LLM chatbot (Neo AI) powered by Puter.js (https://js.puter.com/v2/) to answer user questions based on site data.
+ */
 (function () {
   "use strict";
 
