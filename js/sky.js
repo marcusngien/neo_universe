@@ -1,3 +1,14 @@
+/**
+
+ * @file auth.js
+
+ * @project Neo Universe - NASA Space Apps Challenge
+
+ * @si-disclosure all SI written
+
+ */
+
+
 /* ================= STARFIELD + SHOOTING STARS ================= */
 (function () {
   var c = $("sky"),
