@@ -1,3 +1,9 @@
+/**
+ * @file model3d.js
+ * @project Neo Universe - NASA Space Apps Challenge
+ * @si-disclosure Portions of the 3D procedural geometry and UI interaction code were assisted by SI (LLM) tools.
+ */
+
 /* ================= 3D MODELS ================= */
 var T3 = { voice: true, cur: null, sel: null };
 function MAT(c, o) {
