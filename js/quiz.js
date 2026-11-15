@@ -1,3 +1,13 @@
+/**
+
+ * @file quiz.js
+
+ * @project Neo Universe - NASA Space Apps Challenge
+
+ * @si-disclosure all human written
+
+ */
+
 var Q = [
   {
     q: "How long does an astronaut need to unfold the Lunar Rover from the lander?",
