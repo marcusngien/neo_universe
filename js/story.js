@@ -98,10 +98,21 @@ var STORY = [
         s.video +
         '" poster="' +
         isrc(s.img) +
-        '" controls playsinline preload="metadata"></video>' +
+        '" autoplay controls playsinline preload="auto"></video>' +
         "<span>" +
         esc(s.y) +
         "</span>";
+
+      var vid = $("stpic").querySelector("video");
+      if (vid) {
+        var playPromise = vid.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(function () {
+            vid.muted = true;
+            vid.play().catch(function () {});
+          });
+        }
+      }
     } else {
       $("stpic").innerHTML =
         '<img src="' +
