@@ -1,3 +1,13 @@
+/**
+
+ * @file auth.js
+
+ * @project Neo Universe - NASA Space Apps Challenge
+
+ * @si-disclosure 50% human's write it, 50% written by si
+
+ */
+
 /* ================= DATA ================= */
 var COL = {
   moon: "var(--moon)",
