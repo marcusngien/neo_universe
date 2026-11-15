@@ -1,6 +1,6 @@
 /**
 
- * @file auth.js
+ * @file data.js
 
  * @project Neo Universe - NASA Space Apps Challenge
 
