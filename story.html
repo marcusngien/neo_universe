@@ -75,18 +75,18 @@
 
       .scroll-cue {
         position: absolute;
-        bottom: 64px;
+        bottom: 54px;
         left: 50%;
         transform: translateX(-50%);
         z-index: 6;
-        padding: 10px 20px;
+        padding: 6px 13px;
         border-radius: 999px;
-        background: rgba(5, 8, 24, 0.78);
-        border: 1px solid rgba(61, 224, 255, 0.45);
+        background: rgba(5, 8, 24, 0.72);
+        border: 1px solid rgba(61, 224, 255, 0.4);
         color: var(--cyan, #3de0ff);
         font-family: "Orbitron", sans-serif;
-        font-size: 12px;
-        letter-spacing: 1.5px;
+        font-size: 10px;
+        letter-spacing: 1px;
         text-decoration: none;
         white-space: nowrap;
         backdrop-filter: blur(6px);
@@ -103,7 +103,7 @@
 
       @keyframes bounceCue {
         0%, 100% { transform: translate(-50%, 0); }
-        50% { transform: translate(-50%, 6px); }
+        50% { transform: translate(-50%, 5px); }
       }
 
       #stx.stx {
@@ -157,9 +157,9 @@
       </div>
 
       <div class="tlnav">
-        <button class="btn alt" id="stPrev">◂ PREVIOUS CHAPTER</button>
+        <button class="btn alt" id="stPrev">◂ PREV</button>
         <div class="prog"><i id="stprog"></i></div>
-        <button class="btn alt" id="stNext">NEXT CHAPTER▸</button>
+        <button class="btn alt" id="stNext">NEXT ▸</button>
       </div>
     </section>
 
