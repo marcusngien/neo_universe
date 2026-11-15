@@ -1,3 +1,13 @@
+/**
+
+ * @file auth.js
+
+ * @project Neo Universe - NASA Space Apps Challenge
+
+ * @si-disclosure 65%human write, 35% SI write
+
+ */
+
 var MISSION =
   "The mission never changed: go farther, and send what you learn back home.";
 
