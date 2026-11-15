@@ -85,6 +85,9 @@ var STORY = [
 ];
 
 (function () {
+  var storySec = $("story");
+  if (!storySec || storySec.offsetParent === null) return;
+
   var k = 0;
 
   function show(i) {
