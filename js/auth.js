@@ -1,7 +1,8 @@
-/* ================= FIREBASE ACCOUNT SYSTEM =================
-   This file is an ES module: load it with <script type="module" src="auth.js">
-   It must be served over http(s) (not file://).
-============================================================ */
+/**
+ * @file auth.js
+ * @project Neo Universe - NASA Space Apps Challenge
+ * @si-disclosure all human written
+ */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
 import {
   getAuth,
@@ -22,7 +23,7 @@ import {
   serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
 
-/* 1) PASTE YOUR OWN CONFIG HERE (Firebase console > Project settings > Your apps) */
+
 const firebaseConfig = {
   apiKey: "AIzaSyAiHAHmzCDvLDJXO2yxwKL15erbAnQNQsw",
   authDomain: "neo-universe-29373.firebaseapp.com",
@@ -39,9 +40,9 @@ const db = getFirestore(app);
 
 const $a = (id) => document.getElementById(id);
 let user = null;
-let mode = "login"; // "login" or "signup"
+let mode = "login"; 
 
-/* ---------- friendly error messages ---------- */
+
 const ERR = {
   "auth/invalid-credential": "Wrong email or password.",
   "auth/invalid-email": "That email address does not look right.",
@@ -63,7 +64,7 @@ function fail(e) {
   say(ERR[e.code] || "Something went wrong: " + (e.code || e.message));
 }
 
-/* ---------- progress merge (guest progress + cloud progress) ---------- */
+
 function mergeProgress(a, b) {
   const out = { seen: {}, quiz: 0, quizDone: false, badges: {} };
   [a, b].forEach((p) => {
@@ -76,7 +77,7 @@ function mergeProgress(a, b) {
   return out;
 }
 
-/* ---------- cloud save (called by save() in progress.js) ---------- */
+
 let saveTimer = null;
 window.cloudSave = function () {
   if (!user) return;
@@ -106,8 +107,8 @@ async function loadCloudProgress() {
     try {
       localStorage.setItem("ghostP", JSON.stringify(window.P));
     } catch (e) {}
-    window.check(); // re-draw badges (and award any that are now earned)
-    window.cloudSave(); // write the merged result back
+    window.check(); 
+    window.cloudSave();
   } catch (e) {
     console.error("Cloud load failed", e);
     say("Logged in, but progress could not be loaded. Check your Firestore rules.");
@@ -122,7 +123,7 @@ function resetLocalProgress() {
   window.renderBadges();
 }
 
-/* ---------- UI ---------- */
+
 function openAuth() {
   $a("authModal").classList.add("on");
   document.body.style.overflow = "hidden";
@@ -171,7 +172,7 @@ addEventListener("keydown", (e) => {
 $a("tabLogin").onclick = () => setMode("login");
 $a("tabSignup").onclick = () => setMode("signup");
 
-/* email + password */
+
 $a("aform").onsubmit = async (e) => {
   e.preventDefault();
   const email = $a("aemail").value.trim(),
@@ -194,7 +195,6 @@ $a("aform").onsubmit = async (e) => {
   }
 };
 
-/* Google */
 $a("agoogle").onclick = async () => {
   say("");
   try {
@@ -204,7 +204,6 @@ $a("agoogle").onclick = async () => {
   }
 };
 
-/* forgot password */
 $a("areset").onclick = async () => {
   const email = $a("aemail").value.trim();
   if (!email) return say("Type your email above first, then press this again.");
@@ -216,7 +215,6 @@ $a("areset").onclick = async () => {
   }
 };
 
-/* logout */
 $a("alogout").onclick = async () => {
   try {
     await signOut(auth);
@@ -225,7 +223,6 @@ $a("alogout").onclick = async () => {
   }
 };
 
-/* ---------- react to login / logout ---------- */
 onAuthStateChanged(auth, async (u) => {
   const was = user;
   user = u;
@@ -234,7 +231,7 @@ onAuthStateChanged(auth, async (u) => {
     await loadCloudProgress();
     closeAuth();
   } else if (was) {
-    resetLocalProgress(); // so the next person on this device starts clean
+    resetLocalProgress(); 
   }
 });
 
