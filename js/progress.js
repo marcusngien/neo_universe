@@ -1,3 +1,13 @@
+/**
+
+ * @file progress.js
+
+ * @project Neo Universe - NASA Space Apps Challenge
+
+ * @si-disclosure human write 70%, SI write 30%
+
+ */
+
 /* ================= PROGRESS / BADGES ================= */
 var P = {
   seen: {},
