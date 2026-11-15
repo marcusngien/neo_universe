@@ -1,3 +1,13 @@
+/**
+
+ * @file utlis.js
+
+ * @project Neo Universe - NASA Space Apps Challenge
+
+ * @si-disclosure all human written
+
+ */
+
 /* ================= HELPERS ================= */
 var IMG_DIR = "images/"; // change this one line if the image folder moves
 
