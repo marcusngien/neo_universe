@@ -1,11 +1,16 @@
-/* ================= MINI GAMES =================
-   Needs (loaded before this file): data.js, utlis.js, progress.js
-   Uses: D, COL, ZN, thumb(), and P / save() / toast() when they exist.
-   Best scores are stored in P.games, so they live next to your badges. */
+/**
+
+ * @file auth.js
+
+ * @project Neo Universe - NASA Space Apps Challenge
+
+ * @si-disclosure all si written
+
+*/
 (function () {
   "use strict";
 
-  /* ---------- helpers ---------- */
+
   function el(id) {
     return document.getElementById(id);
   }
@@ -30,7 +35,7 @@
     Array.prototype.forEach.call(list, fn);
   }
 
-  /* an emoji per type, shown behind the photo if the image is missing */
+
   var ICO = {
     Rover: "🤖",
     Lander: "🛬",
@@ -48,7 +53,7 @@
     ["mars", "🔴", "MARS"],
     ["deep", "🛰️", "DEEP SPACE"],
   ];
-  /* twins have almost the same clues, so never offer both in "Who am I?" */
+
   var TWIN = {
     "viking-1": "viking-2",
     "viking-2": "viking-1",
@@ -73,7 +78,6 @@
     );
   }
 
-  /* ---------- read aloud ---------- */
   var voiceOn = false;
   function speak(txt) {
     if (!voiceOn || !("speechSynthesis" in window)) return;
@@ -95,7 +99,6 @@
     else speechSynthesis.cancel();
   };
 
-  /* ---------- best scores (saved with your badge progress) ---------- */
   function getBest(key) {
     if (typeof P === "undefined" || !P.games || P.games[key] == null)
       return null;
@@ -115,7 +118,6 @@
     return isNew;
   }
 
-  /* ---------- tabs ---------- */
   var tabs = document.querySelectorAll("#gtabs button");
   function openTab(id) {
     each(tabs, function (x) {
@@ -134,9 +136,7 @@
   });
   var HASH = { "#memory": "g1", "#sorter": "g2", "#who": "g3" };
 
-  /* =====================================================
-     GAME 1 · MEMORY MATCH  (match each picture to its name)
-     ===================================================== */
+
   var MM = { n: 6, cards: [], first: null, lock: false, moves: 0, found: 0, tok: 0 };
 
   function mmMenu() {
@@ -338,9 +338,7 @@
     speak("Well done! You found all the pairs.");
   }
 
-  /* =====================================================
-     GAME 2 · PLACE SORTER  (Moon, Mars or deep space?)
-     ===================================================== */
+
   var PS = {
     mode: "relaxed",
     queue: [],
@@ -551,9 +549,6 @@
     el("psAg").focus();
   }
 
-  /* =====================================================
-     GAME 3 · WHO AM I?  (guess the explorer from the clues)
-     ===================================================== */
   var WA = {
     n: 5,
     i: 0,
@@ -774,7 +769,7 @@
     speak("Round complete. You are a " + rank);
   }
 
-  /* ---------- go ---------- */
+
   mmMenu();
   psMenu();
   waMenu();
