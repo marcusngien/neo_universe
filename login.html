@@ -39,10 +39,8 @@
         overflow-x: hidden;
       }
 
-      /* stars */
       #stars { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; }
 
-      /* signal */
       .signal {
         position: fixed;
         left: 50%;
@@ -70,7 +68,6 @@
         100% { transform: scale(1.8); opacity: 0; }
       }
 
-      /* compact main container */
       main {
         position: relative;
         z-index: 1;
@@ -153,6 +150,15 @@
         gap: 8px;
       }
       .btn.alt:hover { border-color: var(--cyan); }
+      .btn.guest {
+        margin-top: 8px;
+        color: var(--mute);
+        border-style: dashed;
+      }
+      .btn.guest:hover {
+        color: var(--cyan);
+        border-color: var(--cyan);
+      }
 
       .or { display: flex; align-items: center; gap: 10px; margin: 10px 0; color: var(--mute); font-size: 13px; }
       .or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--line); }
@@ -192,7 +198,6 @@
       <h1 id="title">Log in</h1>
       <p class="lead" id="lead">Save your badges and quiz progress, and pick up where you left off on any device.</p>
 
-      <!-- logged out -->
       <div id="aout">
         <div class="tabs" role="tablist">
           <button type="button" role="tab" id="tabLogin" aria-selected="true">Log in</button>
@@ -219,11 +224,14 @@
           </svg>
           Continue with Google
         </button>
-        
+
+        <button class="btn alt guest" id="aguest" type="button">
+          🚀 Continue as Guest
+        </button>
+
         <button class="link" id="areset" type="button">Forgot your password?</button>
       </div>
 
-      <!-- already logged in -->
       <div id="ain">
         <p id="ahello"></p>
         <button class="btn" id="agoto" type="button">Continue to the site</button>
@@ -403,6 +411,18 @@
         }
       };
 
+      function markEntered(isGuest) {
+        try {
+          localStorage.setItem("ghostEntered", isGuest ? "guest" : "1");
+        } catch (e) {}
+      }
+
+      $("aguest").onclick = () => {
+        markEntered(true);
+        say("Entering as Guest (progress saved on this device only)…", true);
+        location.href = HOME;
+      };
+
       $("areset").onclick = async () => {
         const email = $("aemail").value.trim();
         if (!email) return say("Type your email above, then press this again.");
@@ -414,9 +434,6 @@
         }
       };
 
-      function markEntered() {
-        try { localStorage.setItem("ghostEntered", "1"); } catch (e) {}
-      }
       $("agoto").onclick = () => (location.href = HOME);
       $("alogout").onclick = async () => {
         try {
@@ -438,7 +455,7 @@
           $("title").textContent = "You're logged in";
           $("lead").textContent = "";
           $("ahello").textContent = "Signed in as " + (user.displayName || user.email || "Explorer") + ".";
-          markEntered();
+          markEntered(false);
           if (!justLoggedIn || redirecting) return;
           redirecting = true;
           say("Syncing your progress…", true);
