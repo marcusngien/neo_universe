@@ -1,3 +1,11 @@
+/* ==========================================================================
+   Project: Neo Universe - NASA Space Apps Challenge
+   File: style.css
+   SI Disclosure: This stylesheet is a hybrid of original human-written layout/styling 
+   and Super Intelligence (SI / LLM) assisted CSS components (e.g., responsive grids, 
+   animations, and modal styling).
+   ========================================================================== */
+
 :root {
   --bg: #05060f;
   --panel: rgba(14, 18, 40, 0.78);
