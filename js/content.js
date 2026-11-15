@@ -1,4 +1,12 @@
-/* ================= TABS ================= */
+/**
+
+ * @file auth.js
+
+ * @project Neo Universe - NASA Space Apps Challenge
+
+ * @si-disclosure all human written
+
+ */
 document.querySelectorAll("#tabs button").forEach(function (b) {
   b.onclick = function () {
     document.querySelectorAll("#tabs button").forEach(function (x) {
@@ -10,7 +18,6 @@ document.querySelectorAll("#tabs button").forEach(function (b) {
   };
 });
 
-/* ================= TIMELINE ================= */
 var SD = D.map(function (d, i) {
   return i;
 }).sort(function (a, b) {
@@ -84,7 +91,6 @@ $("tl")
   };
 })();
 
-/* ================= COMPARE ================= */
 (function () {
   var a = $("ca"),
     b = $("cb"),
@@ -185,9 +191,9 @@ $("tl")
   r();
 })();
 
-/* ================= 3D LAB + VIDEOS ================= */
+
 $("lab").innerHTML = D.map(function (d, i) {
-  // 自动过滤：只有配置了 3D 模型 (glb 或 model) 且不是纯照片 (photo) 的设备才显示
+  
   if ((!d.glb && !d.model) || d.photo) return "";
 
   return (
